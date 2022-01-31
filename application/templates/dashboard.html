@@ -1,0 +1,109 @@
+{% extends 'layout.html' %}
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+    <h1>Dashboard</h1>
+    <div class="row" id="mainContent">
+        <div class="col col-sm-6 col-md-4 col-xl-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title placeholder-glow">
+                        <span class="placeholder col-6"></span>
+                    </h5>
+                    <p class="card-text placeholder-glow">
+                        <span class="placeholder col-4"></span> <span class="placeholder col-7"></span><br>
+                        <span class="placeholder col-4"></span> <span class="placeholder col-7"></span><br>
+                        <span class="placeholder col-5"></span> <span class="placeholder col-6"></span><br>
+                        <span class="placeholder col-7"></span> <span class="placeholder col-4"></span><br>
+                        <span class="placeholder col-7"></span> <span class="placeholder col-4"></span>
+                    </p>
+                </div>
+                <div class="card-footer text-end">
+                    <a tabindex="0" role="button" data-bs-trigger="focus"><i class="bi bi-three-dots"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="fab fab-primary" data-bs-toggle="modal" data-bs-target="#createAlert" role="button">
+        <i class="bi bi-plus-circle-fill"></i>
+    </div>
+
+    <div class="modal fade" id="createAlert" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create new estimate</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="createEstimateForm" action="POST">
+                        <div>
+                            <label for="wellName" class="form-label">Well Name</label>
+                            <input type="text" name="wellName" id="wellName" class="form-control" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="createBtn" form="createEstimateForm">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block custom_script %}
+<script>
+    $(document).ready(function() {
+        $('#createBtn').on('click', createEstimate);
+        $('#createAlert').on('hidden.bs.modal', function() {
+            $('#wellName').val('');
+        });
+
+        loadEstimates();
+    });
+
+    function bindCardMenu() {
+        $('.well-container').each(function(index) {
+            var menu = $(this).children('.card-menu-items').html();
+            $(this).find('.card-menu').popover({
+                html: true,
+                content: menu,
+                placement: 'top'
+            });
+        });
+    }
+
+    function loadEstimates() {
+        $.ajax({
+            url: "{{ url_for('api.well_estimate') }}",
+            type: 'GET',
+            dataType: 'html',
+        }).done(function(arg) {
+                $('#mainContent').html(arg);
+                bindCardMenu();
+            }
+        );
+    }
+
+    function createEstimate(event) {
+        if (!$('#wellName').val()) {
+            return;
+        }
+        event.preventDefault();
+        $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating...');
+        $(this).prop('disabled', true);
+        $.ajax({
+            url: "{{ url_for('api.well_estimate') }}",
+            type: 'POST',
+            data: {wellName: $('#wellName').val()}
+        }).done(function () {
+            $('#createAlert').modal('hide');
+            loadEstimates();
+        }).always(function() {
+            $('#createBtn').prop('disabled', false).html('Create');
+        });
+    }
+</script>
+{% endblock %}

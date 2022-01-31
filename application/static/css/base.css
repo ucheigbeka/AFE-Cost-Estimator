@@ -1,0 +1,19 @@
+body {
+    background: #f6f7fc;
+}
+
+header,
+footer {
+    padding: 1.5rem;
+}
+
+header {
+    background: var(--bs-primary);
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+}
+
+footer {
+    text-align: center;
+}

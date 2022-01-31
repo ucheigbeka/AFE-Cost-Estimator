@@ -1,0 +1,27 @@
+<div id="well-{{ well.id }}" class="well-container col col-sm-6 col-md-4 col-xl-3">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">
+                <span class="col-6">{{ well.name }}</span>
+            </h5>
+            <p class="card-text">
+                <span class="col-4">Job type:</span> <span class="col-7">{{ well.job_type }}</span><br>
+                <span class="col-4">Rig type:</span> <span class="col-7">{{ well.rig_type }}</span><br>
+                <span class="col-5">Location:</span> <span class="col-6">{{ well.location }}</span><br>
+                <span class="col-7">Well deviation:</span> <span class="col-4">{{ well.deviation }}</span><br>
+                <span class="col-7">Completion type:</span> <span class="col-4">{{ well.completion_type }}</span>
+            </p>
+        </div>
+        <div class="card-footer text-end">
+            <!-- <i tabindex="0" role="button" data-bs-trigger="focus" class="bi bi-three-dots"></i> -->
+            <a class="card-menu" tabindex="0" role="menu" data-bs-trigger="focus"><i class="bi bi-three-dots"></i></a>
+        </div>
+    </div>
+
+    <div class="card-menu-items d-none" aria-disabled="true">
+        <ul class="list-unstyled">
+            <li><a role="button"><i class="bi bi-trash"></i> Duplicate</a></li>
+            <li><a class="text-danger" role="button"><i class="bi bi-trash"></i> Delete</a></li>
+        </ul>
+    </div>
+</div>
