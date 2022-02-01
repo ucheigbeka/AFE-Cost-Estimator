@@ -140,7 +140,7 @@ class WellCostCategorySchema(ma.SQLAlchemyAutoSchema):
 
 class RigType(db.Model, ModelBase):
     id = db.Column(db.Integer, primary_key=True)
-    type = db.Column(db.String, nullable=False)
+    type = db.Column(db.String, nullable=False, unique=True)
     rig_up = db.Column(db.Integer)
     depth = db.Column(db.Integer)
 
