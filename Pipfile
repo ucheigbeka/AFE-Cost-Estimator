@@ -16,6 +16,7 @@ psycopg2-binary = "*"
 flask-marshmallow = "*"
 marshmallow-sqlalchemy = "*"
 openpyxl = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.8"

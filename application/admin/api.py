@@ -135,6 +135,13 @@ def upload_record():
                     db.session.commit()
                 data['category'] = category.id
             data['operating_time'] = True if data['operating_time'] == 'OT' else False
+        elif _id == 'rig-rate':
+            rig = RigType.query.filter_by(type=data['rig']).first()
+            if not rig:
+                rig = RigType(type=data['rig'])
+                db.session.add(rig)
+                db.session.commit()
+            data['rig'] = rig.id
         if schema:
             model = schema.load(data)
         else:

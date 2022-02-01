@@ -30,7 +30,7 @@ class ModelBase:
                 config = cls.fields_config[name]
                 field.update(config)
 
-            if len(name.split('_')) == 2 and name[-2:] in ['id', 'type'] and name.split('_')[0] in rel_names:
+            if len(name.split('_')) == 2 and name.split('_')[1] in ['id', 'type'] and name.split('_')[0] in rel_names:
                 rel_name = name.split('_')[0]
                 relationship = relationships[rel_names.index(name.split('_')[0])]
                 _class = relationship.mapper.class_
@@ -41,11 +41,11 @@ class ModelBase:
                     'type': 'select',
                     'items': schema.dump(_class.query.all()),
                     'valueField': 'id',
-                    'textField': rel_name
+                    'textField': name.split('_')[1] if name.split('_')[1] == 'type' else rel_name
                 })
             elif isinstance(column.type, db.Integer):
                 field['type'] = 'number'
-            elif isinstance(column.type, (db.String, db.Text)):
+            elif isinstance(column.type, (db.String, db.Text, db.Float)):
                 field['type'] = 'text'
             elif isinstance(column.type, db.Boolean):
                 field['type'] = 'checkbox'
@@ -215,6 +215,8 @@ class WellParameters(db.Model, ModelBase):
     deviation = db.Column(db.String)
     completion_type = db.Column(db.String)
     perforating_type = db.Column(db.String)
+    drilling = db.Column(db.String)
+    operation_timeline = db.Column(db.String)
 
 
 class WellParametersSchema(ma.SQLAlchemyAutoSchema):
@@ -269,7 +271,7 @@ class RigRate(db.Model, ModelBase):
     mob = db.Column(db.Integer)
     demob = db.Column(db.Integer)
     day_rate = db.Column(db.Integer)
-    solid_control_eqpt = db.Column(db.Integer)
+    solid_control_eqpt = db.Column(db.Float)
     extra_catering = db.Column(db.Integer)
     marine_spread = db.Column(db.Integer)
     additional_marine_spread = db.Column(db.Integer)
